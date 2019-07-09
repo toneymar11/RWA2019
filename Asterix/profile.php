@@ -14,17 +14,17 @@
 		}
 	}
 	
-	if(isset($_POST['akcija']))
+	if(isset($_POST['obrisi']))
 	{
-        if($_POST['akcija']=='Obrisi'){
-		$sql = "DELETE FROM jelo WHERE id=" . $_POST['jelo_id'];
+        $idjel=$_POST['jelo_id'];
+		$sql = "DELETE FROM jelo WHERE id=$idjel";
 		$mysqli->query($sql);
-        }
-        else if($_POST['akcija']=='Uredi'){
+     }
+    else if(isset($_POST['uredi'])){
             $ime=$_POST['ime_jela'];
             $cijena=$_POST['cijena'];
-            $id=$_POST['jelo_id'];
-         $query="UPDATE jelo SET ime_jela='".$ime."',cijena=$cijena WHERE id=$id";
+            $idjel=$_POST['jelo_id'];
+         $query="UPDATE jelo SET ime_jela='".$ime."',cijena=$cijena WHERE id=$idjel";
 												
             $result = mysqli_query($mysqli, $query);
             
@@ -36,7 +36,7 @@
             }
             
             
-        }
+        
 	}
 	
 	if(isset($_POST['delete_user']))
@@ -280,17 +280,23 @@
 												echo '</br><h3>Uredjivanje i Brisanje Jela</h3>';												
 												$result = $mysqli->query('SELECT id,ime_jela, url_slike, cijena FROM jelo' );									
 												if($result){
-															echo '<form enctype="multipart/form-data" name="brisanje" method="POST" action=""><table style="width:600px;">';
+															echo '<table style="width:600px;">';
                                                             echo '<tr><td>Ime jela</td><td>Cijena jela</td><td></td> <td></td></tr>';
 															while($obj = $result->fetch_object()){
 																	echo '<tr>';
-																	echo '<td><input type="text" class="form-control" name="ime_jela"  value="'.$obj->ime_jela.'"/></td>';
-                                                                    echo '<td><input type="number" class="form-control" name="cijena"  value="'.$obj->cijena.'"/></td>'; 							echo '<input type="hidden" name="jelo_id" id="jelo_id" value="' . $obj->id .'">';
-                                                                    echo '<td><input type="submit" name="akcija" value="Uredi" class="btn btn-primary"/></td>';
-																	echo '<td><input type="submit" name="akcija" value="Obrisi" class="btn btn-danger"/></td>';      
+                                                                    echo '<form enctype="multipart/form-data" name="uredi" method="POST" action="">';
+																	echo '<td><input type="text" class="form-control" name="ime_jela" id="ime_jela"  value="'.$obj->ime_jela.'"/></td>';
+                                                                    echo '<td><input type="number" class="form-control" name="cijena" id="cijena"  value="'.$obj->cijena.'"/></td>';
+                                                                    
+                                                                    echo '<td><input type="hidden" name="jelo_id" id="jelo_id" value="' . $obj->id .'"></td>';
+                                                                    echo '<td><input type="submit" name="uredi" value="Uredi" class="btn btn-primary"/></form></td>';
+                                                                
+                                                                    echo '<td><form enctype="multipart/form-data" name="obrisi" method="POST" action="">';
+                                                                    echo '<input type="hidden" name="jelo_id" id="jelo_id" value="' . $obj->id .'">';
+																	echo '<input type="submit" name="obrisi" value="Obrisi" class="btn btn-danger"/></form></td>';      
 																	echo '</tr>';  
 															}
-															echo '</table></form>';
+															echo '</table>';
 													}	
 											}																		
 										}
